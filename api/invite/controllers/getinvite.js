@@ -5,7 +5,7 @@ module.exports = {
     const { id } = ctx.params;
 
     const entity = await strapi.services.invite.findOne({
-      invite: id,
+      code: id,
       confirmed: false,
     });
     return sanitizeEntity(entity, { model: strapi.models.invite });

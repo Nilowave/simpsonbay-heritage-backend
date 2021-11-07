@@ -8,7 +8,7 @@
   "options": {
     "increments": true,
     "timestamps": true,
-    "draftAndPublish": true
+    "draftAndPublish": false
   },
   "pluginOptions": {},
   "attributes": {
@@ -17,13 +17,12 @@
       "required": true,
       "unique": false
     },
-    "invite": {
-      "type": "uid",
-      "required": true
-    },
     "confirmed": {
       "type": "boolean",
       "default": false
+    },
+    "code": {
+      "type": "string"
     }
   }
 }
