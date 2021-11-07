@@ -24,7 +24,7 @@ module.exports = (strapi) => {
         strapi.config.middleware.settings.public;
       const staticDir = path.resolve(
         strapi.dir,
-        "../frontend/demo" || strapi.config.paths.static
+        "./demo" || strapi.config.paths.static
       );
 
       strapi.router.get(
