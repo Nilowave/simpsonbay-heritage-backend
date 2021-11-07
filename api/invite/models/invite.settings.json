@@ -23,6 +23,9 @@
     },
     "code": {
       "type": "string"
+    },
+    "invite_link": {
+      "type": "string"
     }
   }
 }

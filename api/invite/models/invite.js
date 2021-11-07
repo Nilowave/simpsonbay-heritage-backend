@@ -13,9 +13,9 @@ module.exports = {
         msecs: new Date().getTime(),
       };
       const uuid = uuidv1(v1options);
-      console.log("set code", uuid);
+      const link = `${process.env.API_DOMAIN}/register/${uuid}`;
       data.code = uuid;
-      // model.set("code", uuid);
+      data.invite_link = link;
     },
   },
 };
