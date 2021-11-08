@@ -11,35 +11,15 @@ import { auth, LoadingIndicatorPage } from "strapi-helper-plugin";
 import PageTitle from "../../components/PageTitle";
 import { useModels } from "../../hooks";
 
-import useFetch from "./hooks";
-import {
-  ALink,
-  Block,
-  Container,
-  LinkWrapper,
-  P,
-  Wave,
-  Separator,
-} from "./components";
-import BlogPost from "./BlogPost";
-import SocialLink from "./SocialLink";
+import { ALink, Block, Container, P, Wave, Separator } from "./components";
 
 const HomePage = ({ history: { push } }) => {
-  const { error, isLoading, posts } = useFetch();
   // Temporary until we develop the menu API
   const {
     collectionTypes,
     singleTypes,
     isLoading: isLoadingForModels,
   } = useModels();
-
-  const handleClick = (e) => {
-    e.preventDefault();
-
-    push(
-      "/plugins/content-type-builder/content-types/plugins::users-permissions.user?modalType=contentType&kind=collectionType&actionType=create&settingType=base&forTarget=contentType&headerId=content-type-builder.modalForm.contentType.header-create&header_icon_isCustom_1=false&header_icon_name_1=contentType&header_label_1=null"
-    );
-  };
 
   const hasAlreadyCreatedContentTypes = useMemo(() => {
     const filterContentTypes = (contentTypes) =>
@@ -63,7 +43,7 @@ const HomePage = ({ history: { push } }) => {
   return (
     <>
       <FormattedMessage id="HomePage.helmet.title">
-        {(title) => <PageTitle title={title} />}
+        {(title) => <PageTitle title="SBG - Content Manager" />}
       </FormattedMessage>
       <Container className="container-fluid">
         <div className="row">
