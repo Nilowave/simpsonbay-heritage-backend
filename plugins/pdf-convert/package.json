@@ -1,0 +1,28 @@
+{
+  "name": "strapi-plugin-pdf-convert",
+  "version": "0.0.0",
+  "description": "This is the description of the plugin.",
+  "strapi": {
+    "name": "Convert PDF",
+    "icon": "book",
+    "description": "Convert a PDF's pages to individual JPG images."
+  },
+  "dependencies": {},
+  "author": {
+    "name": "Danilo Meulens",
+    "email": "",
+    "url": ""
+  },
+  "maintainers": [
+    {
+      "name": "Danilo Meulens",
+      "email": "",
+      "url": ""
+    }
+  ],
+  "engines": {
+    "node": ">=10.16.0 <=14.x.x",
+    "npm": ">=6.0.0"
+  },
+  "license": "MIT"
+}

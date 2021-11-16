@@ -1,0 +1,19 @@
+{
+  "kind": "singleType",
+  "collectionName": "intro_texts",
+  "info": {
+    "name": "Introduction",
+    "description": ""
+  },
+  "options": {
+    "increments": true,
+    "timestamps": true,
+    "draftAndPublish": true
+  },
+  "pluginOptions": {},
+  "attributes": {
+    "text": {
+      "type": "richtext"
+    }
+  }
+}
