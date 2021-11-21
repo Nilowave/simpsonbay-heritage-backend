@@ -552,6 +552,10 @@ module.exports = {
         model: strapi.query("user", "users-permissions").model,
       });
 
+      const jwt = strapi.plugins["users-permissions"].services.jwt.issue(
+        _.pick(user, ["id"])
+      );
+
       if (settings.email_confirmation) {
         try {
           await strapi.plugins[
@@ -561,17 +565,25 @@ module.exports = {
           return ctx.badRequest(null, err);
         }
 
-        return ctx.send({ user: sanitizedUser });
+        return ctx.send({ jwt, user: sanitizedUser });
       }
 
-      const jwt = strapi.plugins["users-permissions"].services.jwt.issue(
-        _.pick(user, ["id"])
-      );
-
-      return ctx.send({
-        jwt,
-        user: sanitizedUser,
-      });
+      //send custom welcome email here
+      await strapi.plugins["email"].services.email
+        .send({
+          to: user.email,
+          templateId: "d-91556ca256014872b1f08b637f00f576",
+        })
+        .then((res) => {
+          console.log("email send success", res);
+          return ctx.send({
+            jwt,
+            user: sanitizedUser,
+          });
+        })
+        .catch((err) => {
+          return ctx.badRequest(null, err);
+        });
     } catch (err) {
       const adminError = _.includes(err.message, "username")
         ? {
