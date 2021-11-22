@@ -1,8 +1,8 @@
 {
   "kind": "singleType",
-  "collectionName": "intro_texts",
+  "collectionName": "e_books",
   "info": {
-    "name": "Introduction",
+    "name": "E-book",
     "description": ""
   },
   "options": {
@@ -12,18 +12,20 @@
   },
   "pluginOptions": {},
   "attributes": {
-    "text": {
-      "type": "richtext"
-    },
-    "video": {
+    "file": {
       "model": "file",
       "via": "related",
       "allowedTypes": [
-        "videos"
+        "files"
       ],
       "plugin": "upload",
       "required": false,
       "pluginOptions": {}
+    },
+    "comments": {
+      "plugin": "comments",
+      "collection": "comment",
+      "via": "related"
     }
   }
 }

@@ -1,0 +1,19 @@
+<svg id="Group_19" data-name="Group 19" xmlns="http://www.w3.org/2000/svg" width="182.748" height="84.071" viewBox="0 0 182.748 84.071">
+  <style>
+    path { 
+      fill: #175c4c;
+    }
+    @media (prefers-color-scheme: dark) {
+      path { 
+        fill: #ffffff;
+      }
+    }
+  </style>
+
+  <path id="Path_20" data-name="Path 20" d="M1226.921,196.359s34.733-27.091,89.823-30.113c26.187-.164,57.238,7.28,89.882,30.113.028-.079-36.619-40.98-88.855-41.688-45.044,2.951-75.593,25.058-90.85,41.688Z" transform="translate(-1223.878 -115.097)"/>
+  <path id="Path_21" data-name="Path 21" d="M1259.355,168.5s-.112-11.3,8.38-18.558,19.8-10.68,19.8-10.68.13,13.736-10.555,21.74S1259.355,168.5,1259.355,168.5Z" transform="translate(-1166.623 -139.261)"/>
+  <path id="Path_22" data-name="Path 22" d="M0,27.693s-.1-10.7,7.6-17.577S25.568,0,25.568,0s.118,13.01-9.575,20.592S0,27.693,0,27.693Z" transform="translate(61.647 7.134) rotate(-11)"/>
+  <path id="Path_23" data-name="Path 23" d="M0,25.212s-.084-9.744,6.283-16A45.091,45.091,0,0,1,21.132,0s.1,11.844-7.914,18.747S0,25.212,0,25.212Z" transform="translate(34.515 19.521) rotate(-20)"/>
+  <path id="Path_24" data-name="Path 24" d="M0,26.961S-.1,16.541,7.564,9.849,25.439,0,25.439,0s.117,12.666-9.527,20.048S0,26.961,0,26.961Z" transform="translate(127.561 7.184) rotate(17)"/>
+  <path id="Path_25" data-name="Path 25" d="M0,24.309S-.09,14.914,6.7,8.88,22.522,0,22.522,0s.1,11.42-8.435,18.075S0,24.309,0,24.309Z" transform="translate(157.096 24.486) rotate(45)"/>
+</svg>

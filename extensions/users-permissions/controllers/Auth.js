@@ -131,6 +131,7 @@ module.exports = {
           })
         );
       } else {
+        console.log("user login:", user);
         const token = strapi.plugins["users-permissions"].services.jwt.issue({
           id: user.id,
         });

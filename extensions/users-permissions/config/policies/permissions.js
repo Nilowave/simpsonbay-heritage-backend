@@ -11,7 +11,6 @@ module.exports = async (ctx, next) => {
   }
   if (ctx.request && ctx.request.header && !ctx.request.header.authorization) {
     const token = ctx.cookies.get("token");
-    console.log("get token", token);
 
     if (token) {
       ctx.request.header.authorization = "Bearer " + token;
@@ -28,13 +27,17 @@ module.exports = async (ctx, next) => {
         throw new Error("Invalid token: Token did not contain required fields");
       }
 
+      console.log("try fetch user ID:", id);
+
       // fetch authenticated user
       ctx.state.user = await strapi.plugins[
         "users-permissions"
-      ].services.user.fetch(id);
+      ].services.user.fetch({ id });
     } catch (err) {
       return handleErrors(ctx, err, "unauthorized");
     }
+
+    console.log("fetched auth user", ctx.state.user.id);
 
     if (!ctx.state.user) {
       return handleErrors(ctx, "User Not Found", "unauthorized");

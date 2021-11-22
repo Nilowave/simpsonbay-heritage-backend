@@ -27,4 +27,10 @@ module.exports = ({ env }) => ({
       // logger: console, // Only if you want to `stdout` logs
     },
   },
+
+  comments: {
+    enableUsers: true,
+    badWords: false,
+    moderatorRoles: ["Authenticated"],
+  },
 });
