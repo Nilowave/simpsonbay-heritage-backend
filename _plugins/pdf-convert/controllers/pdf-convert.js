@@ -1,4 +1,4 @@
-'use strict';
+"use strict";
 
 /**
  * pdf-convert.js controller
@@ -7,7 +7,6 @@
  */
 
 module.exports = {
-
   /**
    * Default action.
    *
@@ -19,7 +18,7 @@ module.exports = {
 
     // Send 200 `ok`
     ctx.send({
-      message: 'ok'
+      message: "ok",
     });
-  }
+  },
 };

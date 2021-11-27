@@ -43,7 +43,7 @@ const HomePage = ({ history: { push } }) => {
   return (
     <>
       <FormattedMessage id="HomePage.helmet.title">
-        {(title) => <PageTitle title="SBG - Content Manager" />}
+        {(title) => <PageTitle title="SBH - Content Manager" />}
       </FormattedMessage>
       <Container className="container-fluid">
         <div className="row">
