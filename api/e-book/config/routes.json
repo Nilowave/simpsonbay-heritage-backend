@@ -23,6 +23,22 @@
       "config": {
         "policies": []
       }
+    },
+    {
+      "method": "POST",
+      "path": "/convert-pdf",
+      "handler": "e-book.convert",
+      "config": {
+        "policies": []
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/e-book/pages",
+      "handler": "e-book.getPages",
+      "config": {
+        "policies": []
+      }
     }
   ]
 }

@@ -1,4 +1,5 @@
 "use strict";
+
 module.exports = {
   async logout(ctx) {
     const token = ctx.cookies.get("token");

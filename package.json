@@ -12,6 +12,7 @@
   "devDependencies": {},
   "dependencies": {
     "knex": "0.21.18",
+    "pdf2pic": "^2.1.4",
     "pg": "^8.7.1",
     "pg-connection-string": "^2.5.0",
     "sqlite3": "5.0.0",

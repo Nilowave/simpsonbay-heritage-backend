@@ -1,5 +1,15 @@
 "use strict";
 
+const _ = require("lodash");
+const { sanitizeEntity } = require("strapi-utils");
+
+const sanitize = (data, options = {}) => {
+  return sanitizeEntity(data, {
+    model: strapi.getModel("file", "upload"),
+    ...options,
+  });
+};
+
 /**
  * pdf-convert.js controller
  *
@@ -21,4 +31,6 @@ module.exports = {
       message: "ok",
     });
   },
+
+  convert: async (ctx) => {},
 };

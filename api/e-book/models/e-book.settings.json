@@ -26,6 +26,10 @@
       "plugin": "comments",
       "collection": "comment",
       "via": "related"
+    },
+    "book_pages": {
+      "type": "pdfconverter",
+      "columnType": "longtext"
     }
   }
 }
