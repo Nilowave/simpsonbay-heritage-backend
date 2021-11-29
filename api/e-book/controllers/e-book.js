@@ -3,6 +3,7 @@
 const { fromBuffer } = require("pdf2pic");
 const axios = require("axios");
 const AWS = require("aws-sdk");
+const Boom = require("boom");
 
 const PAGES_DIR = "ebook-pages/";
 
@@ -27,7 +28,6 @@ const getPagesFromS3 = () => {
       if (err) {
         resolve(err);
       }
-      console.log(data);
       resolve(data);
     });
   });
@@ -83,7 +83,24 @@ const uploadToS3 = (config) => {
 
 module.exports = {
   async getPages(ctx) {
-    const pages = await getPagesFromS3();
+    const _pages = await getPagesFromS3();
+    const pages = _pages.Contents.map((page) => {
+      if (page.Key !== "ebook-pages/") {
+        return `https://${process.env.AWS_BUCKET_NAME}.s3.amazonaws.com/${page.Key}`;
+      }
+    }).filter((page) => page);
+
+    // sort array by page number
+    pages.sort((a, b) => {
+      const pA = parseInt(a.split("_")[1].split(".")[0]);
+      const pB = parseInt(b.split("_")[1].split(".")[0]);
+      if (pA > pB) {
+        return 1;
+      } else {
+        return -1;
+      }
+    });
+
     ctx.send({ pages });
   },
 

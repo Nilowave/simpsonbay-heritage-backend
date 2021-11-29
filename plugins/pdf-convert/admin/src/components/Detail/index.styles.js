@@ -21,6 +21,7 @@ export const Label = styled.p`
 `;
 
 export const Value = styled.p`
+  position: relative;
   margin: 0;
   line-height: 12px;
   color: ${(props) => props.color || "#292b2c"};
@@ -37,5 +38,17 @@ export const Value = styled.p`
     css`
       border-color: ${props.color};
       padding: 2px 4px;
+    `}
+
+  ${(props) =>
+    props.isStatus &&
+    css`
+      padding: 4px 8px;
+      text-transform: uppercase;
+      font-size: 11px;
+      font-weight: 600;
+      ${props.color === "green" && "background-color: rgba(0, 255, 0, 0.1);"}
+      ${props.color === "red" && "background-color: rgba(255, 0, 0, 0.1);"}
+      ${props.color === "grey" && "background-color: rgba(0, 0, 0, 0.1);"}
     `}
 `;

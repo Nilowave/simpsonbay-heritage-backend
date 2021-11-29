@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import { formatDistance } from "date-fns";
 import { request } from "strapi-helper-plugin";
 import Detail from "../Detail";
-import spinner from "../../../assets/icons/spinner2.svg";
+import spinner from "../../../assets/icons/spinner.svg";
 import * as S from "./index.styles";
 
 const API_DOMAIN = "http://localhost:1337";
@@ -29,9 +29,6 @@ const PdfConverter = (props) => {
   const [statusColor, setStatusColor] = useState(StatusColors.GREY);
   const [lastUpdate, setLastUpdate] = useState(null);
   const [configData, setConfigData] = useState(null);
-  // console.log(props.value);
-  // console.log(value);
-  // console.log(configData);
 
   const handleSyncClick = () => {
     setStatus(StatusTypes.SYNCING);
@@ -40,22 +37,24 @@ const PdfConverter = (props) => {
       method: "POST",
     })
       .then((response) => {
-        console.log(response);
-        // setImageData(response.page[0].base64);
-        // const _config = {
-        //   last_update: new Date().toISOString(),
-        //   pages: response.pages,
-        //   book_update: bookData.file.last_update,
-        // };
         setConfigData(response);
         setStatus(StatusTypes.SYNCED);
 
         const updateValue = JSON.stringify(response);
-        console.log(updateValue);
+
         props.onChange({ target: { name: "book_pages", value: updateValue } });
+
+        strapi.notification.toggle({
+          type: "success",
+          message: "Syncing E-book pages success.",
+        });
       })
       .catch((err) => {
         setStatus(StatusTypes.ERROR);
+        strapi.notification.toggle({
+          type: "warning",
+          message: "There was an error syncing the pages.",
+        });
         console.log(err);
       });
   };
@@ -99,22 +98,28 @@ const PdfConverter = (props) => {
         // Compare book last updates
         if (book.file.updated_at !== configData.file.updated_at) {
           setStatus(StatusTypes.NOT_SYNCED);
+          strapi.notification.toggle({
+            type: "info",
+            message: "Book pages are out of sync.",
+          });
         } else {
           setStatus(StatusTypes.SYNCED);
         }
       } catch (err) {
         setStatus(StatusTypes.ERROR);
+        strapi.notification.toggle({
+          type: "warning",
+          message: "There was an error requesting E-book information.",
+        });
       }
     })();
   }, [configData]);
-
-  useEffect(() => {}, []);
 
   return (
     <S.Wrapper>
       <S.Title>Pages</S.Title>
       <S.DetailsWrapper>
-        <Detail label="Status" value={status} color={statusColor} />
+        <Detail label="Status" value={status} color={statusColor} isStatus />
         <Detail
           label="Total Pages"
           value={configData ? configData.pages : "~"}
