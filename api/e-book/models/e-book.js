@@ -5,10 +5,4 @@
  * to customize this model
  */
 
-module.exports = {
-  lifecycles: {
-    beforeUpdate: async (data) => {
-      console.log("updatesss");
-    },
-  },
-};
+module.exports = {};

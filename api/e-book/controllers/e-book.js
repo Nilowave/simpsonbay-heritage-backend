@@ -3,7 +3,8 @@
 const { fromBuffer } = require("pdf2pic");
 const axios = require("axios");
 const AWS = require("aws-sdk");
-const Boom = require("boom");
+const PDFParser = require("pdf2json");
+const pdfParser = new PDFParser();
 
 const PAGES_DIR = "ebook-pages/";
 
@@ -81,8 +82,30 @@ const uploadToS3 = (config) => {
   });
 };
 
+const getPdfPageSize = (pdfBuffer) => {
+  return new Promise((resolve, reject) => {
+    pdfParser.on("pdfParser_dataReady", function (data) {
+      resolve({
+        width: data.Pages[0].Width,
+        height: data.Pages[0].Height,
+        ratio: data.Pages[0].Height / data.Pages[0].Width,
+        pageNum: data.Pages.length,
+      });
+    });
+
+    pdfParser.on("error", (err) => {
+      console.error("Parser Error", err);
+      resolve(err);
+    });
+
+    pdfParser.parseBuffer(pdfBuffer);
+  });
+};
+
 module.exports = {
   async getPages(ctx) {
+    const book = await strapi.services["e-book"].find();
+    const bookData = JSON.parse(book.book_pages);
     const _pages = await getPagesFromS3();
     const pages = _pages.Contents.map((page) => {
       if (page.Key !== "ebook-pages/") {
@@ -101,44 +124,81 @@ module.exports = {
       }
     });
 
-    ctx.send({ pages });
+    ctx.send({
+      pages: pages.filter((page, index) => index < bookData.pages && page),
+      book: bookData,
+    });
   },
 
   async convert(ctx) {
+    console.time(" > Get Book");
     const book = await strapi.services["e-book"].find();
+    console.timeEnd(" > Get Book");
 
     if (book.file) {
-      console.log("Get PDF as buffer");
+      console.time(" > Download PDF Buffer");
       const response = await axios.get(book.file.url, {
         responseType: "arraybuffer",
       });
+      console.timeEnd(" > Download PDF Buffer");
 
-      // TODO: Make this dynamic somehow..
+      const pdfBuffer = response.data;
+
+      console.time(" > Get Page Size");
+      const pageSize = await getPdfPageSize(pdfBuffer);
+      console.timeEnd(" > Get Page Size");
+      console.log(pageSize);
+
+      // TODO: Optimize CPU usage by converting pages in batches of 10
+
       const size = 1200;
-      const ratio = 1.4142;
+      const ratio = pageSize.ratio || 1.4142;
 
       const options = {
         density: 400,
-        quality: 80,
+        quality: 75,
         format: "jpg",
         width: size,
         height: Math.round(size * ratio),
       };
 
-      const convert = fromBuffer(response.data, options);
-      const pagesToConvert = -1;
+      const convert = fromBuffer(pdfBuffer, options);
+      const pagesToConvert = [1];
+
+      const chunkSize = 10;
+      const pageList = Array.from(
+        { length: pageSize.pageNum },
+        (_, i) => i + 1
+      );
+      const pageChunks = pageList.reduce((resultArray, item, index) => {
+        const chunkIndex = Math.floor(index / chunkSize);
+
+        if (!resultArray[chunkIndex]) {
+          resultArray[chunkIndex] = []; // start a new chunk
+        }
+
+        resultArray[chunkIndex].push(item);
+
+        return resultArray;
+      }, []);
 
       // Convert PDF pages to base64
-      console.log("Begin converting pages in bulk");
-      const pages = await convert.bulk(pagesToConvert, true);
+      console.time(" > Convert Pages");
+      let pages = [];
+      for (let i = 0; i < pageChunks.length; i++) {
+        const pagesChunk = await convert.bulk(pageChunks[i], true);
+        pages = pages.concat(pagesChunk);
+      }
+      console.timeEnd(" > Convert Pages");
 
       const config = {
         file: book.file,
         pages,
       };
 
-      console.log("Pages ready for upload to S3");
+      console.time(" > Upload S3");
       const upload = await uploadToS3(config);
+      console.timeEnd(" > Upload S3");
 
       upload.last_update = new Date().toISOString();
 

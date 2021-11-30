@@ -65,6 +65,10 @@ const PdfConverter = (props) => {
   }, [props.value]);
 
   useEffect(() => {
+    console.log(props);
+  }, [props]);
+
+  useEffect(() => {
     switch (status) {
       case StatusTypes.ERROR:
       case StatusTypes.NOT_SYNCED:
@@ -94,6 +98,7 @@ const PdfConverter = (props) => {
 
         setLastUpdate(_lastUpdate);
         const book = await request(`${API_DOMAIN}/e-book`);
+        console.log(book);
 
         // Compare book last updates
         if (book.file.updated_at !== configData.file.updated_at) {
