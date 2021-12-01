@@ -29,7 +29,7 @@
     },
     "book_pages": {
       "type": "pdfconverter",
-      "columnType": "longtext"
+      "columnType": "text"
     }
   }
 }
