@@ -132,7 +132,16 @@ module.exports = {
 
   async convert(ctx) {
     console.time(" > Get Book");
-    const book = await strapi.services["e-book"].find();
+    let book;
+    try {
+      book = await strapi.services["e-book"].find();
+    } catch (err) {
+      console.error(err);
+      ctx.badRequest({
+        message: "There was an error fetchinf book details",
+        err,
+      });
+    }
     console.timeEnd(" > Get Book");
 
     if (book.file) {

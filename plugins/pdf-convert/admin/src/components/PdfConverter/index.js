@@ -98,7 +98,12 @@ const PdfConverter = (props) => {
         );
 
         setLastUpdate(_lastUpdate);
-        const book = await request(`${API_DOMAIN}/e-book`);
+        let book;
+        try {
+          book = await request(`${API_DOMAIN}/e-book`);
+        } catch (err) {
+          console.error(err);
+        }
         console.log(book);
 
         // Compare book last updates
