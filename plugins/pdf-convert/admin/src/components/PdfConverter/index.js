@@ -5,7 +5,8 @@ import Detail from "../Detail";
 import spinner from "../../../assets/icons/spinner.svg";
 import * as S from "./index.styles";
 
-const API_DOMAIN = "http://localhost:1337";
+// const API_DOMAIN = "http://localhost:1337";
+const API_DOMAIN = "";
 
 const StatusTypes = {
   SYNCED: "Synced",
