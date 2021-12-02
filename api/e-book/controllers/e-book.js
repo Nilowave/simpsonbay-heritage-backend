@@ -118,6 +118,7 @@ module.exports = {
 
     return sanitizeEntity(entities, { model: strapi.models["e-book"] });
   },
+
   async getPages(ctx) {
     const book = await strapi.services["e-book"].find();
     const bookData = JSON.parse(book.book_pages);

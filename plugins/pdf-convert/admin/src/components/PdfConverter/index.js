@@ -115,6 +115,18 @@ const PdfConverter = (props) => {
   useEffect(() => {
     (async () => {
       try {
+        let book;
+        try {
+          book = await request(`${API_DOMAIN}/e-book`);
+          const userIsAdmin = book.user.roles.filter(
+            (role) => role.code === "strapi-super-admin"
+          )[0];
+          if (userIsAdmin) setIsAdmin(true);
+        } catch (err) {
+          console.error(err.message);
+        }
+        console.log("book", book);
+
         if (!configData) {
           console.log("np config", configData);
           setStatus(StatusTypes.NOT_SYNCED);
@@ -128,17 +140,6 @@ const PdfConverter = (props) => {
         );
 
         setLastUpdate(_lastUpdate);
-        let book;
-        try {
-          book = await request(`${API_DOMAIN}/e-book`);
-          const userIsAdmin = book.user.roles.filter(
-            (role) => role.code === "strapi-super-admin"
-          )[0];
-          if (userIsAdmin) setIsAdmin(true);
-        } catch (err) {
-          console.error(err.message);
-        }
-        console.log("book", book);
 
         // Compare book last updates
         if (book.file.updated_at !== configData.file.updated_at) {
