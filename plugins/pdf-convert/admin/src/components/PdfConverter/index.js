@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import { formatDistance } from "date-fns";
 import { request } from "strapi-helper-plugin";
 import Detail from "../Detail";
@@ -26,6 +26,8 @@ const StatusColors = {
 };
 
 const PdfConverter = (props) => {
+  const inputField = useRef(null);
+  const hiddenSave = useRef(null);
   const [status, setStatus] = useState(StatusTypes.LOADING);
   const [statusColor, setStatusColor] = useState(StatusColors.GREY);
   const [lastUpdate, setLastUpdate] = useState(null);
@@ -49,6 +51,10 @@ const PdfConverter = (props) => {
           type: "success",
           message: "Syncing E-book pages success.",
         });
+
+        setTimeout(() => {
+          hiddenSave.current.click();
+        }, 100);
       })
       .catch((err) => {
         setStatus(StatusTypes.ERROR);
@@ -60,7 +66,33 @@ const PdfConverter = (props) => {
       });
   };
 
+  const handleImport = () => {
+    if (inputField.current) {
+      if (inputField.current.value) {
+        console.log(inputField.current.value);
+        try {
+          const value = JSON.parse(inputField.current.value);
+
+          const cc = props.onChange({
+            target: { name: "book_pages", value: inputField.current.value },
+          });
+          console.log(cc);
+
+          setTimeout(() => {
+            hiddenSave.current.click();
+          }, 100);
+        } catch (err) {
+          strapi.notification.toggle({
+            type: "warning",
+            message: "Incorrect import data format.",
+          });
+        }
+      }
+    }
+  };
+
   useEffect(() => {
+    console.log(props.value);
     const value = JSON.parse(props.value);
     setConfigData(value);
   }, [props.value]);
@@ -102,7 +134,7 @@ const PdfConverter = (props) => {
         try {
           book = await request(`${API_DOMAIN}/e-book`);
         } catch (err) {
-          console.error(err);
+          console.error(err.message);
         }
         console.log(book);
 
@@ -120,7 +152,8 @@ const PdfConverter = (props) => {
         setStatus(StatusTypes.ERROR);
         strapi.notification.toggle({
           type: "warning",
-          message: "There was an error requesting E-book information.",
+          message:
+            "There was an error requesting E-book information. Make sure the E-book is pulished.",
         });
       }
     })();
@@ -136,30 +169,40 @@ const PdfConverter = (props) => {
           value={configData ? configData.pages : "~"}
         />
         <Detail label="Last Synced" value={lastUpdate ? lastUpdate : "~"} />
+        <S.SInput ref={inputField} type="text" name="import" />
       </S.DetailsWrapper>
+      <S.ButtonsWrapper>
+        <S.SButton onClick={handleImport} type="button" color="#9a9a9a">
+          Import
+        </S.SButton>
+        {(status === StatusTypes.NOT_SYNCED ||
+          status === StatusTypes.SYNCING) && (
+          <>
+            <S.ConvertButton
+              disabled={status === StatusTypes.SYNCING}
+              onClick={handleSyncClick}
+              type="button"
+            >
+              {status === StatusTypes.SYNCING ? (
+                <img src={spinner} width="24px" />
+              ) : (
+                <span>Sync pages</span>
+              )}
+            </S.ConvertButton>
+          </>
+        )}
+      </S.ButtonsWrapper>
       {(status === StatusTypes.NOT_SYNCED ||
         status === StatusTypes.SYNCING) && (
-        <>
-          <S.ConvertButton
-            disabled={status === StatusTypes.SYNCING}
-            onClick={handleSyncClick}
-            type="button"
-          >
-            {status === StatusTypes.SYNCING ? (
-              <img src={spinner} width="24px" />
-            ) : (
-              <span>Sync pages</span>
-            )}
-          </S.ConvertButton>
-          <S.Note>
-            {status === StatusTypes.SYNCING ? (
-              <span>Sync will take a few minutes.</span>
-            ) : (
-              <span>Pages must be manually synced after a PDF update.</span>
-            )}
-          </S.Note>
-        </>
+        <S.Note>
+          {status === StatusTypes.SYNCING ? (
+            <span>Sync will take a few minutes.</span>
+          ) : (
+            <span>Pages must be manually synced after a PDF update.</span>
+          )}
+        </S.Note>
       )}
+      <S.SaveButton ref={hiddenSave}>save</S.SaveButton>
     </S.Wrapper>
   );
 };

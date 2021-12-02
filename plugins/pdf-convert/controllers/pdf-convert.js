@@ -25,7 +25,8 @@ module.exports = {
 
   index: async (ctx) => {
     // Add your own logic here.
-
+    const user = ctx.state.user;
+    console.log(user);
     // Send 200 `ok`
     ctx.send({
       message: "ok",

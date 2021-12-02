@@ -21,17 +21,17 @@ export const Title = styled.h5`
   line-height: 1.5;
 `;
 
-export const ConvertButton = styled.button`
+export const SButton = styled.button`
   padding: 1rem 2rem;
   display: flex;
   justify-content: center;
   align-items: center;
-  background-color: #175c4c;
+  background-color: ${(props) => props.color || "#175c4c"};
   border-radius: 3px;
   color: white;
   font-weight: 600;
   letter-spacing: 1.2px;
-  margin-left: auto;
+  /* margin-left: auto; */
   transition: all 0.5s ease;
 
   &:disabled {
@@ -40,7 +40,31 @@ export const ConvertButton = styled.button`
   }
 `;
 
+export const ConvertButton = styled(SButton)``;
+export const SaveButton = styled.button`
+  display: none;
+`;
+
+export const ButtonsWrapper = styled.div`
+  display: flex;
+  gap: 1rem;
+  justify-content: flex-end;
+`;
+
 export const DetailsWrapper = styled.div`
   /* max-width: 70%; */
   margin-bottom: 2rem;
+`;
+
+export const SInput = styled.input`
+  padding: 0.6rem;
+  margin: 0.5rem 0;
+  border: 1px solid rgba(0, 0, 0, 0.05);
+  font-family: Lato;
+  line-height: normal;
+  color: #9ea7b8;
+  font-size: 11px;
+  font-weight: 500;
+  text-transform: uppercase;
+  width: 100%;
 `;
