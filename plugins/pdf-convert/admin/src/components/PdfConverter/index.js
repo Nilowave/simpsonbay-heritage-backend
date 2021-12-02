@@ -99,10 +99,6 @@ const PdfConverter = (props) => {
   }, [props.value]);
 
   useEffect(() => {
-    console.log(props);
-  }, [props]);
-
-  useEffect(() => {
     switch (status) {
       case StatusTypes.ERROR:
       case StatusTypes.NOT_SYNCED:
@@ -120,6 +116,7 @@ const PdfConverter = (props) => {
     (async () => {
       try {
         if (!configData) {
+          console.log("np config", configData);
           setStatus(StatusTypes.NOT_SYNCED);
           return;
         }
@@ -141,7 +138,7 @@ const PdfConverter = (props) => {
         } catch (err) {
           console.error(err.message);
         }
-        console.log(book);
+        console.log("book", book);
 
         // Compare book last updates
         if (book.file.updated_at !== configData.file.updated_at) {
