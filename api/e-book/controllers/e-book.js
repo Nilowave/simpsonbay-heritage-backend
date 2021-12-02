@@ -131,20 +131,31 @@ module.exports = {
   },
 
   async convert(ctx) {
+    console.log(" > Get Book");
     console.time(" > Get Book");
     let book;
     try {
       book = await strapi.services["e-book"].find();
+      console.log("book details", book);
     } catch (err) {
+      console.log("book errror", err);
       console.error(err);
       ctx.badRequest({
-        message: "There was an error fetchinf book details",
+        message: "There was an error fetching book details",
         err,
       });
     }
     console.timeEnd(" > Get Book");
 
+    if (!book) {
+      ctx.badRequest({
+        message: "There was an error fetching book details",
+        err,
+      });
+    }
+
     if (book.file) {
+      console.log(" > Download PDF Buffer");
       console.time(" > Download PDF Buffer");
       const response = await axios.get(book.file.url, {
         responseType: "arraybuffer",

@@ -56,7 +56,7 @@ const PdfConverter = (props) => {
           type: "warning",
           message: "There was an error syncing the pages.",
         });
-        console.log(err);
+        console.error(err);
       });
   };
 
