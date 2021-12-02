@@ -1,0 +1,12 @@
+{
+  "routes": [
+    {
+      "method": "GET",
+      "path": "/",
+      "handler": "copylink.index",
+      "config": {
+        "policies": []
+      }
+    }
+  ]
+}

@@ -106,7 +106,7 @@ const getPdfPageSize = (pdfBuffer) => {
 module.exports = {
   async find(ctx) {
     const user = ctx.state.user;
-    console.log(user);
+
     let entities;
     if (ctx.query._q) {
       entities = await strapi.services["e-book"].search(ctx.query);
@@ -114,7 +114,7 @@ module.exports = {
       entities = await strapi.services["e-book"].find(ctx.query);
     }
 
-    entities.user = user;
+    if (entities) entities.user = user;
 
     return sanitizeEntity(entities, { model: strapi.models["e-book"] });
   },

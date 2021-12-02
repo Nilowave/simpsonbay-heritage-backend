@@ -1,8 +1,8 @@
 {
   "kind": "collectionType",
-  "collectionName": "invites",
+  "collectionName": "group_invites",
   "info": {
-    "name": "Invite",
+    "name": "group invite",
     "description": ""
   },
   "options": {
@@ -12,20 +12,19 @@
   },
   "pluginOptions": {},
   "attributes": {
-    "email": {
-      "type": "email",
-      "required": true,
-      "unique": false
+    "maximum": {
+      "type": "integer"
     },
-    "confirmed": {
-      "type": "boolean",
-      "default": false
+    "expires": {
+      "type": "date"
     },
-    "code": {
-      "type": "string"
+    "link": {
+      "type": "string",
+      "unique": true
     },
-    "invite_link": {
-      "type": "string"
+    "users": {
+      "plugin": "users-permissions",
+      "collection": "user"
     },
     "copylink": {
       "type": "copylink"
