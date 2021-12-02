@@ -1,12 +1,3 @@
 {
-  "routes": [
-    {
-      "method": "GET",
-      "path": "/",
-      "handler": "pdf-convert.index",
-      "config": {
-        "policies": []
-      }
-    }
-  ]
+  "routes": []
 }

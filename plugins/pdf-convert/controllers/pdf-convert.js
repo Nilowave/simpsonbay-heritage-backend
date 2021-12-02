@@ -28,10 +28,8 @@ module.exports = {
     const user = ctx.state.user;
     console.log(user);
     // Send 200 `ok`
-    ctx.send({
+    ctx.badRequest({
       message: "ok",
     });
   },
-
-  convert: async (ctx) => {},
 };

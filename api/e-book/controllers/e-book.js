@@ -5,6 +5,7 @@ const axios = require("axios");
 const AWS = require("aws-sdk");
 const PDFParser = require("pdf2json");
 const pdfParser = new PDFParser();
+const { sanitizeEntity } = require("strapi-utils");
 
 const PAGES_DIR = "ebook-pages/";
 
@@ -103,6 +104,20 @@ const getPdfPageSize = (pdfBuffer) => {
 };
 
 module.exports = {
+  async find(ctx) {
+    const user = ctx.state.user;
+    console.log(user);
+    let entities;
+    if (ctx.query._q) {
+      entities = await strapi.services["e-book"].search(ctx.query);
+    } else {
+      entities = await strapi.services["e-book"].find(ctx.query);
+    }
+
+    entities.user = user;
+
+    return sanitizeEntity(entities, { model: strapi.models["e-book"] });
+  },
   async getPages(ctx) {
     const book = await strapi.services["e-book"].find();
     const bookData = JSON.parse(book.book_pages);

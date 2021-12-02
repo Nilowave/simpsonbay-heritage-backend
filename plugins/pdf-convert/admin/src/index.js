@@ -1,6 +1,6 @@
 import pluginPkg from "../../package.json";
 import pluginId from "./pluginId";
-// import App from "./containers/App";
+import App from "./containers/App";
 // import Initializer from "./containers/Initializer";
 // import lifecycles from "./lifecycles";
 import trads from "./translations";
@@ -18,7 +18,7 @@ export default (strapi) => {
     description: pluginDescription,
     icon,
     id: pluginId,
-    initializer: null, //Initializer,
+    // initializer: Initializer,
     injectedComponents: [],
     isReady: true, //false,
     // isRequired: pluginPkg.strapi.required || false,
@@ -26,7 +26,7 @@ export default (strapi) => {
     // lifecycles,
     leftMenuLinks: [],
     leftMenuSections: [],
-    mainComponent: null, //App,
+    mainComponent: App,
     name,
     preventComponentRendering: false,
     trads,

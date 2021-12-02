@@ -32,6 +32,7 @@ const PdfConverter = (props) => {
   const [statusColor, setStatusColor] = useState(StatusColors.GREY);
   const [lastUpdate, setLastUpdate] = useState(null);
   const [configData, setConfigData] = useState(null);
+  const [isAdmin, setIsAdmin] = useState(false);
 
   const handleSyncClick = () => {
     setStatus(StatusTypes.SYNCING);
@@ -133,6 +134,10 @@ const PdfConverter = (props) => {
         let book;
         try {
           book = await request(`${API_DOMAIN}/e-book`);
+          const userIsAdmin = book.user.roles.filter(
+            (role) => role.code === "strapi-super-admin"
+          )[0];
+          if (userIsAdmin) setIsAdmin(true);
         } catch (err) {
           console.error(err.message);
         }
@@ -169,40 +174,45 @@ const PdfConverter = (props) => {
           value={configData ? configData.pages : "~"}
         />
         <Detail label="Last Synced" value={lastUpdate ? lastUpdate : "~"} />
-        <S.SInput ref={inputField} type="text" name="import" />
+        {isAdmin && <S.SInput ref={inputField} type="text" name="import" />}
       </S.DetailsWrapper>
-      <S.ButtonsWrapper>
-        <S.SButton onClick={handleImport} type="button" color="#9a9a9a">
-          Import
-        </S.SButton>
-        {(status === StatusTypes.NOT_SYNCED ||
-          status === StatusTypes.SYNCING) && (
-          <>
-            <S.ConvertButton
-              disabled={status === StatusTypes.SYNCING}
-              onClick={handleSyncClick}
-              type="button"
-            >
+
+      {isAdmin && (
+        <>
+          <S.ButtonsWrapper>
+            <S.SButton onClick={handleImport} type="button" color="#9a9a9a">
+              Import
+            </S.SButton>
+            {(status === StatusTypes.NOT_SYNCED ||
+              status === StatusTypes.SYNCING) && (
+              <>
+                <S.ConvertButton
+                  disabled={status === StatusTypes.SYNCING}
+                  onClick={handleSyncClick}
+                  type="button"
+                >
+                  {status === StatusTypes.SYNCING ? (
+                    <img src={spinner} width="24px" />
+                  ) : (
+                    <span>Sync pages</span>
+                  )}
+                </S.ConvertButton>
+              </>
+            )}
+          </S.ButtonsWrapper>
+          {(status === StatusTypes.NOT_SYNCED ||
+            status === StatusTypes.SYNCING) && (
+            <S.Note>
               {status === StatusTypes.SYNCING ? (
-                <img src={spinner} width="24px" />
+                <span>Sync will take a few minutes.</span>
               ) : (
-                <span>Sync pages</span>
+                <span>Pages must be manually synced after a PDF update.</span>
               )}
-            </S.ConvertButton>
-          </>
-        )}
-      </S.ButtonsWrapper>
-      {(status === StatusTypes.NOT_SYNCED ||
-        status === StatusTypes.SYNCING) && (
-        <S.Note>
-          {status === StatusTypes.SYNCING ? (
-            <span>Sync will take a few minutes.</span>
-          ) : (
-            <span>Pages must be manually synced after a PDF update.</span>
+            </S.Note>
           )}
-        </S.Note>
+          <S.SaveButton ref={hiddenSave}>save</S.SaveButton>
+        </>
       )}
-      <S.SaveButton ref={hiddenSave}>save</S.SaveButton>
     </S.Wrapper>
   );
 };
