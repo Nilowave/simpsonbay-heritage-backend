@@ -4,6 +4,7 @@ import { request } from "strapi-helper-plugin";
 import Detail from "../Detail";
 import spinner from "../../../assets/icons/spinner.svg";
 import * as S from "./index.styles";
+import { useContentManagerEditViewDataManager } from "strapi-helper-plugin";
 
 // const API_DOMAIN = "http://localhost:1337";
 const API_DOMAIN = "";
@@ -26,6 +27,9 @@ const StatusColors = {
 };
 
 const PdfConverter = (props) => {
+  const data = useContentManagerEditViewDataManager();
+  const { modifiedData } = useContentManagerEditViewDataManager();
+  console.log(data);
   const inputField = useRef(null);
   const hiddenSave = useRef(null);
   const [status, setStatus] = useState(StatusTypes.LOADING);
@@ -72,7 +76,7 @@ const PdfConverter = (props) => {
       if (inputField.current.value) {
         console.log(inputField.current.value);
         try {
-          const value = JSON.parse(inputField.current.value);
+          // const value = JSON.parse(inputField.current.value);
 
           const cc = props.onChange({
             target: { name: "book_pages", value: inputField.current.value },
@@ -93,7 +97,7 @@ const PdfConverter = (props) => {
   };
 
   useEffect(() => {
-    console.log(props.value);
+    // console.log(props.value);
     const value = JSON.parse(props.value);
     setConfigData(value);
   }, [props.value]);
@@ -115,20 +119,13 @@ const PdfConverter = (props) => {
   useEffect(() => {
     (async () => {
       try {
-        let book;
-        try {
-          book = await request(`${API_DOMAIN}/e-book`);
-          const userIsAdmin = book.user.roles.filter(
-            (role) => role.code === "strapi-super-admin"
-          )[0];
-          if (userIsAdmin) setIsAdmin(true);
-        } catch (err) {
-          console.error(err.message);
-        }
-        console.log("book", book);
+        const userIsAdmin = true;
+        if (userIsAdmin) setIsAdmin(false);
+
+        console.log("book", modifiedData);
 
         if (!configData) {
-          console.log("np config", configData);
+          console.log("no config", configData);
           setStatus(StatusTypes.NOT_SYNCED);
           return;
         }
@@ -142,7 +139,7 @@ const PdfConverter = (props) => {
         setLastUpdate(_lastUpdate);
 
         // Compare book last updates
-        if (book.file.updated_at !== configData.file.updated_at) {
+        if (modifiedData.file.updated_at !== configData.file.updated_at) {
           setStatus(StatusTypes.NOT_SYNCED);
           strapi.notification.toggle({
             type: "info",
