@@ -11,6 +11,7 @@ export const SButton = styled.button`
   border-radius: 3px;
   gap: 0.5rem;
   width: 20%;
+  min-width: 100px;
 
   img {
     height: 16px;
