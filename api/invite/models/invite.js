@@ -1,5 +1,6 @@
 "use strict";
 const { v1: uuidv1 } = require("uuid");
+const { findInvite } = require("../../group-invite/controllers/group-invite");
 
 /**
  * Read the documentation (https://strapi.io/documentation/developer-docs/latest/development/backend-customization.html#lifecycle-hooks)
@@ -9,6 +10,12 @@ const { v1: uuidv1 } = require("uuid");
 module.exports = {
   lifecycles: {
     beforeCreate: async (data) => {
+      const invites = await strapi.services.invite.find();
+      const exists = invites.filter((invite) => invite.email === data.email);
+      if (exists.length) {
+        throw strapi.errors.badRequest("This email has already been invited");
+      }
+
       const v1options = {
         msecs: new Date().getTime(),
       };
@@ -16,8 +23,6 @@ module.exports = {
       const link = `${process.env.API_DOMAIN}/register/${uuid}`;
       data.code = uuid;
       data.invite_link = link;
-
-      // console.log(data);
 
       await strapi.plugins["email"].services.email
         .send({
@@ -34,8 +39,6 @@ module.exports = {
           console.error(err);
           console.log("error sending email", err.response.body);
         });
-
-      console.log("done");
     },
   },
 };

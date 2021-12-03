@@ -25,6 +25,14 @@
       }
     },
     {
+      "method": "GET",
+      "path": "/get-group-invites/:id",
+      "handler": "group-invite.findInvite",
+      "config": {
+        "policies": []
+      }
+    },
+    {
       "method": "POST",
       "path": "/group-invites",
       "handler": "group-invite.create",

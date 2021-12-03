@@ -26,6 +26,9 @@
       "plugin": "users-permissions",
       "collection": "user"
     },
+    "code": {
+      "type": "string"
+    },
     "copylink": {
       "type": "copylink"
     }

@@ -16,6 +16,7 @@ module.exports = {
       const uuid = uuidv1(v1options);
       const link = `${process.env.API_DOMAIN}/register/group/${uuid}`;
       data.link = link;
+      data.code = uuid;
 
       console.log(data);
     },

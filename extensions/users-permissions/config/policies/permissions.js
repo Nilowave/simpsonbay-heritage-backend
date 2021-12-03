@@ -37,8 +37,6 @@ module.exports = async (ctx, next) => {
       return handleErrors(ctx, err, "unauthorized");
     }
 
-    console.log("fetched auth user", ctx.state.user.id);
-
     if (!ctx.state.user) {
       return handleErrors(ctx, "User Not Found", "unauthorized");
     }
