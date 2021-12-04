@@ -29,7 +29,7 @@ const StatusColors = {
 const PdfConverter = (props) => {
   const data = useContentManagerEditViewDataManager();
   const { modifiedData } = useContentManagerEditViewDataManager();
-  console.log(data);
+  // console.log(data);
   const inputField = useRef(null);
   const hiddenSave = useRef(null);
   const [status, setStatus] = useState(StatusTypes.LOADING);
@@ -74,14 +74,14 @@ const PdfConverter = (props) => {
   const handleImport = () => {
     if (inputField.current) {
       if (inputField.current.value) {
-        console.log(inputField.current.value);
+        // console.log(inputField.current.value);
         try {
           // const value = JSON.parse(inputField.current.value);
 
           const cc = props.onChange({
             target: { name: "book_pages", value: inputField.current.value },
           });
-          console.log(cc);
+          // console.log(cc);
 
           setTimeout(() => {
             hiddenSave.current.click();
@@ -97,7 +97,7 @@ const PdfConverter = (props) => {
   };
 
   useEffect(() => {
-    // console.log(props.value);
+    console.log(props.value);
     const value = JSON.parse(props.value);
     setConfigData(value);
   }, [props.value]);
@@ -120,12 +120,12 @@ const PdfConverter = (props) => {
     (async () => {
       try {
         const userIsAdmin = true;
-        if (userIsAdmin) setIsAdmin(false);
+        if (userIsAdmin) setIsAdmin(true);
 
-        console.log("book", modifiedData);
+        // console.log("book", modifiedData);
 
         if (!configData) {
-          console.log("no config", configData);
+          // console.log("no config", configData);
           setStatus(StatusTypes.NOT_SYNCED);
           return;
         }
